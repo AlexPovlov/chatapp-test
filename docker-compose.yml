@@ -32,17 +32,17 @@ services:
             - app-network
         container_name: app_${APP_NAME}
 
-    # queue:
-    #     <<: *base_app
-    #     restart: always
-    #     command: php artisan queue:work
-    #     container_name: queue_${APP_NAME}
+    queue:
+        <<: *base_app
+        restart: always
+        command: php artisan queue:work
+        container_name: queue_${APP_NAME}
 
-    # scheduler:
-    #     <<: *base_app
-    #     restart: always
-    #     command: php artisan schedule:work
-    #     container_name: scheduler_${APP_NAME}
+    scheduler:
+        <<: *base_app
+        restart: always
+        command: php artisan schedule:work
+        container_name: scheduler_${APP_NAME}
 
     postgres:
         image: postgres:alpine
