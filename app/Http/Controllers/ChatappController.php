@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ChatappTokenRequest;
 use App\Repositories\ChatappTokenRepository;
-use App\Services\Interfaces\ChatappApiInteface;
-use Illuminate\Http\Request;
+use App\Services\Interfaces\ChatappApiInterface;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class ChatappController extends Controller
 {
-    function __construct(protected ChatappTokenRepository $chatappTokenRepository)
-    {
+    public function __construct(
+        protected ChatappTokenRepository $chatappTokenRepository
+    ) {
     }
 
     /**
@@ -21,19 +21,27 @@ class ChatappController extends Controller
     public function index()
     {
         $tokens = $this->chatappTokenRepository->getAll();
+
         return Inertia::render('Token', compact('tokens'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ChatappTokenRequest $request, ChatappApiInteface $chatappApi)
-    {
+    public function store(
+        ChatappTokenRequest $request,
+        ChatappApiInterface $chatappApi
+    ) {
         $validated = $request->validated();
-        $response = $chatappApi->tokens($validated['app_id'],$validated['email'],$validated['password']);
+        $response = $chatappApi->tokens(
+            $validated['app_id'],
+            $validated['email'],
+            $validated['password']
+        );
 
-        if(!$response['success'])
+        if (!$response['success']) {
             return Redirect::back()->withErrors('Ошибка: не верные данные');
+        }
 
         $data = $response['data'];
         $this->chatappTokenRepository->firsCreate(
@@ -43,15 +51,8 @@ class ChatappController extends Controller
             $data['refreshToken'],
             $data['refreshTokenEndTime'],
         );
-        return Redirect::back();
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function refresh($id)
-    {
-        //
+        return Redirect::back();
     }
 
     /**
@@ -60,6 +61,7 @@ class ChatappController extends Controller
     public function destroy($id)
     {
         $this->chatappTokenRepository->deleteFromId($id);
+
         return Redirect::back();
     }
 }

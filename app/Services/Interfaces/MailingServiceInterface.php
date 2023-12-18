@@ -6,6 +6,6 @@ use App\Models\Mailing;
 
 interface MailingServiceInterface
 {
-    function createRecord(string $message, array $phones);
-    function handleJob(Mailing $mailing, string $token);
+    public function createRecord(string $message, array $phones);
+    public function handleJob(Mailing $mailing, string $token);
 }

@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Services\ChatappApi;
-use App\Services\Interfaces\ChatappApiInteface;
+use App\Services\Interfaces\ChatappApiInterface;
 use App\Services\Interfaces\MailingJobServiceInterface;
 use App\Services\Interfaces\MailingServiceInterface;
 use App\Services\MailingJobService;
@@ -23,8 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(ChatappApiInteface::class, function ($app) {
-            return new ChatappApi(new Client(['base_uri' => config('services.chatapp.url')]));
+        $this->app->bind(ChatappApiInterface::class, function ($app) {
+            return new ChatappApi(
+                new Client(['base_uri' => config('services.chatapp.url')])
+            );
         });
     }
 

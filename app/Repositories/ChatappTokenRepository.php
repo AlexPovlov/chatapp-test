@@ -6,11 +6,11 @@ use App\Models\ChatappToken;
 
 class ChatappTokenRepository extends AbstractRepository
 {
-    function __construct(protected ChatappToken $model)
+    public function __construct(protected ChatappToken $model)
     {
     }
 
-    function firsCreate(
+    public function firsCreate(
         $appId,
         $accessToken,
         $accessTokenEndTime,
@@ -25,12 +25,12 @@ class ChatappTokenRepository extends AbstractRepository
         ]);
     }
 
-    function getAccessTokenFromId($id)
+    public function getAccessTokenFromId($id)
     {
         return $this->model->findOrFail($id)->access_token;
     }
 
-    function deleteFromId($id)
+    public function deleteFromId($id)
     {
         return $this->model->whereId($id)->delete();
     }

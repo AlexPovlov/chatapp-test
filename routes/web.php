@@ -37,13 +37,18 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::resource('chatapp', ChatappController::class)->only(['index', 'store', 'destroy']);
+    Route::resource('chatapp', ChatappController::class)
+        ->only(['index', 'store', 'destroy']);
 
-    Route::resource('mailing', MailingController::class)->only(['index', 'store']);
+    Route::resource('mailing', MailingController::class)
+        ->only(['index', 'store']);
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
 });
 
 require __DIR__ . '/auth.php';

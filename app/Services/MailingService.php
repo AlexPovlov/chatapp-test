@@ -21,11 +21,13 @@ class MailingService implements MailingServiceInterface
     {
         $phones = collect($phones)->unique('phone')->values()->all();
         $this->phoneRepository->upsert($phones);
-        $phonesDb = $this->phoneRepository->getFromPhonesArray(array_column($phones, 'phone'));
+        $phonesDb = $this->phoneRepository
+            ->getFromPhonesArray(array_column($phones, 'phone'));
 
         $phoneIds = $phonesDb->pluck('id')->toArray();
 
-        $mailing = $this->mailingRepository->createAndAttachPhones($message, $phoneIds);
+        $mailing = $this->mailingRepository
+            ->createAndAttachPhones($message, $phoneIds);
 
         return $mailing;
     }
@@ -34,9 +36,17 @@ class MailingService implements MailingServiceInterface
     {
         $batch = [];
         $delay = 0;
-        foreach ($mailing->phones as $key => $phone) {
-            $batch[] = new MailingJob($mailing->message, $phone->phone, $phone->pivot, $token, $delay += rand(5, 50));
+
+        foreach ($mailing->phones as $phone) {
+            $batch[] = new MailingJob(
+                $mailing->message,
+                $phone->phone,
+                $phone->pivot,
+                $token,
+                $delay += rand(5, 50)
+            );
         }
+        
         Bus::batch($batch)->dispatch();
 
         return true;

@@ -6,6 +6,10 @@ use App\Models\MailingStatus;
 
 interface MailingJobServiceInterface
 {
-    function setPhoneMailingStatus(MailingStatus $mailingStatus, $responseStatus): self;
-    function eventMailing($mailingId): self;
+    public function setPhoneMailingStatus(
+        MailingStatus $mailingStatus,
+        $responseStatus
+    ): self;
+
+    public function eventMailing($mailingId): self;
 }

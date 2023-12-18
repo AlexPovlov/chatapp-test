@@ -8,14 +8,18 @@ class MailingStatus extends Pivot
 {
     protected $table = 'mailing_statuses';
 
-    protected $fillable = ['status', 'mailing_id', 'phone_id'];
+    protected $fillable = [
+        'status',
+        'mailing_id',
+        'phone_id'
+    ];
 
-    function mailing()
+    public function mailing()
     {
         return $this->belongsTo(Mailing::class);
     }
 
-    function phone()
+    public function phone()
     {
         return $this->belongsTo(Phone::class);
     }

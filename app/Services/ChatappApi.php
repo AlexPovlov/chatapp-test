@@ -2,21 +2,21 @@
 
 namespace App\Services;
 
-use App\Services\Interfaces\ChatappApiInteface;
+use App\Services\Interfaces\ChatappApiInterface;
 use GuzzleHttp\Client;
 
-class ChatappApi implements ChatappApiInteface
+class ChatappApi implements ChatappApiInterface
 {
     protected $token;
 
-    function __construct(protected Client $handler)
+    public function __construct(protected Client $handler)
     {
     }
 
-    function setToken($token)
+    public function setToken($token)
     {
-        dump(123);
         $this->token = $token;
+        
         return $this;
     }
 
@@ -29,12 +29,12 @@ class ChatappApi implements ChatappApiInteface
             ],
         ];
         $options = array_merge($default_options, $options);
-        // dd($options, $method);
         $response = $this->handler->request($method, $uri, $options);
+
         return json_decode($response->getBody(), 1);
     }
 
-    function licenses()
+    public function licenses()
     {
         $options = [
             'headers' => ['Authorization' => $this->token]
@@ -43,7 +43,7 @@ class ChatappApi implements ChatappApiInteface
         return $this->request('licenses', 'GET', $options);
     }
 
-    function tokens($appId, $email, $password)
+    public function tokens($appId, $email, $password)
     {
         $options = [
             'json' => [
@@ -56,7 +56,7 @@ class ChatappApi implements ChatappApiInteface
         return $this->request('tokens', 'POST', options: $options);
     }
 
-    function refresh($refreshToken)
+    public function refresh($refreshToken)
     {
         $options = [
             'headers' => ['Refresh' => $refreshToken]
@@ -65,17 +65,23 @@ class ChatappApi implements ChatappApiInteface
         return $this->request('tokens/refresh', options: $options);
     }
 
-    function messageWhatsApp($message, $phone)
+    public function messageWhatsApp($message, $phone)
     {
         $response = $this->licenses();
-        
 
-        $licenseId = isset($response['data'][0]['licenseId']) ? $response['data'][0]['licenseId'] : null;
+        $licenseId = isset($response['data'][0]['licenseId'])
+            ? $response['data'][0]['licenseId']
+            : null;
+            
         $options = [
             'headers' => ['Authorization' => $this->token],
             'json' => ['text' => $message]
         ];
 
-        return $this->request("licenses/{$licenseId}/messengers/grWhatsApp/chats/{$phone}/messages/text", 'POST', options: $options);
+        return $this->request(
+            "licenses/{$licenseId}/messengers/grWhatsApp/chats/{$phone}/messages/text",
+            'POST',
+            $options
+        );
     }
 }

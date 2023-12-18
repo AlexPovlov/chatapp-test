@@ -6,17 +6,16 @@ use App\Models\Phone;
 
 class PhoneRepository
 {
-    function __construct(protected Phone $model)
+    public function __construct(protected Phone $model)
     {
     }
 
-    function upsert(array $phones)
+    public function upsert(array $phones)
     {
-        
         return $this->model->upsert($phones, ['phone']); 
     }
 
-    function getFromPhonesArray(array $phones)
+    public function getFromPhonesArray(array $phones)
     {
         return $this->model->whereIn('phone', $phones)->get();
     }

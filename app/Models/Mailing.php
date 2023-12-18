@@ -8,8 +8,10 @@ class Mailing extends Model
 {
     protected $fillable = ['message'];
 
-    function phones()
+    public function phones()
     {
-        return $this->belongsToMany(Phone::class, 'mailing_statuses')->using(MailingStatus::class)->withPivot(['status']);
+        return $this->belongsToMany(Phone::class, 'mailing_statuses')
+            ->using(MailingStatus::class)
+            ->withPivot(['status']);
     }
 }

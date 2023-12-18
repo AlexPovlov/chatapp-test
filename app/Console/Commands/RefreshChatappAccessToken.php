@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\ChatappToken;
-use App\Services\Interfaces\ChatappApiInteface;
+use App\Services\Interfaces\ChatappApiInterface;
 use Illuminate\Console\Command;
 
 class RefreshChatappAccessToken extends Command
@@ -20,15 +20,16 @@ class RefreshChatappAccessToken extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Обновление токенов доступа к сервису chatapp';
 
     /**
      * Execute the console command.
      */
-    public function handle(ChatappApiInteface $chatappApi)
+    public function handle(ChatappApiInterface $chatappApi)
     {
         $tokens = ChatappToken::all();
-        foreach ($tokens as $key => $token) {
+
+        foreach ($tokens as $token) {
             $response = $chatappApi->refresh($token->refresh);
             $data = $response['data'];
             $token->update([

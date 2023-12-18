@@ -7,14 +7,19 @@ use Illuminate\Database\Eloquent\Collection;
 
 abstract class AbstractRepository
 {
-    function getAll(array $with = [], $order = ['column' => 'id', 'order' => 'desc']): Collection
-    {
-        if (!isset($this->model))
+    public function getAll(
+        array $with = [],
+        $order = ['column' => 'id', 'order' => 'desc']
+    ): Collection {
+        if (!isset($this->model)) {
             throw new Exception('$model field required');
+        }
 
         $query = $this->model;
-        if (!empty($with))
+
+        if (!empty($with)) {
             $query = $query->with($with);
+        }
 
         return $query->orderBy($order['column'], $order['order'])->get();
     }

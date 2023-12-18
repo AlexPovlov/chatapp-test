@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Collection;
 
 class MailingStatusRepository extends AbstractRepository
 {
-    function __construct(protected MailingStatus $model)
+    public function __construct(protected MailingStatus $model)
     {
     }
 
-    function getFromMailingId($mailingId): Collection
+    public function getFromMailingId($mailingId): Collection
     {
         return $this->model->whereMailingId($mailingId)->get();
     }
